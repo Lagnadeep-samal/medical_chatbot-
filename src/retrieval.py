@@ -3,11 +3,11 @@ from rank_bm25 import BM25Okapi
 from src.vectorstore import load_vectorstore
 
 
-vectorstore = load_vectorstore()
 
 
 def hybrid_retrieve(query):
 
+    vectorstore = load_vectorstore()
     # Dense similarity search
     dense_docs = vectorstore.similarity_search(
         query,

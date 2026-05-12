@@ -5,11 +5,11 @@ from src.config import PINECONE_INDEX
 from src.embeddings import download_embeddings
 
 
-embedding = download_embeddings()
 
 
 def upload_to_pinecone(chunks):
 
+    embedding = download_embeddings()
     vectorstore = PineconeVectorStore.from_documents(
         documents=chunks,
         embedding=embedding,
