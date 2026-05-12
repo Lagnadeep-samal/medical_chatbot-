@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Medical Chatbot
+    </title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+</head>
+
+<body>
+
+    <div class="chat-container">
+
+        <!-- HEADER -->
+
+        <div class="chat-header">
+
+            <div class="bot-info">
+
+                <img src="https://cdn-icons-png.flaticon.com/512/387/387569.png">
+
+                <div>
+
+                    <h2>Medical Chatbot</h2>
+
+                    <p>Ask medical questions</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- CHAT BODY -->
+
+        <div class="chat-body"
+             id="chatBody">
+
+        </div>
+
+        <!-- INPUT -->
+
+        <div class="chat-input">
+
+            <form id="chatForm">
+
+                <input
+                    type="text"
+                    id="question"
+                    placeholder="Type your message..."
+                    autocomplete="off"
+                    required
+                >
+
+                <button type="submit">
+                    ➤
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        $(document).ready(function () {
+
+            $("#chatForm").on("submit", function (e) {
+
+                e.preventDefault();
+
+                let question = $("#question").val();
+
+                if(question.trim() === "")
+                    return;
+
+                // USER MESSAGE
+
+                let userMessage = `
+                    <div class="message user-message">
+                        ${question}
+                    </div>
+                `;
+
+                $("#chatBody").append(userMessage);
+
+                $("#question").val("");
+
+                // AUTO SCROLL
+
+                $("#chatBody").scrollTop(
+                    $("#chatBody")[0].scrollHeight
+                );
+
+                // AJAX REQUEST
+
+                $.ajax({
+
+                    type: "POST",
+
+                    url: "/get",
+
+                    data: {
+                        msg: question
+                    },
+
+                    success: function(response) {
+
+                        let botMessage = `
+                            <div class="message bot-message">
+                                ${response}
+                            </div>
+                        `;
+
+                        $("#chatBody").append(botMessage);
+
+                        $("#chatBody").scrollTop(
+                            $("#chatBody")[0].scrollHeight
+                        );
+                    }
+                });
+
+            });
+
+        });
+
+    </script>
+
+</body>
+
+</html>
